@@ -451,6 +451,35 @@ user_subvol_rm_allowed
                 ordinary directory. Whether this is possible can be detected at runtime, see
                 *rmdir_subvol* feature in *FILESYSTEM FEATURES*.
 
+wq_cpu_set=<cpu_set>
+        (since: 6.5, default: all online CPUs)
+
+        Btrfs workqueues can slow sensitive user tasks down because they can use any
+        online CPU to perform heavy workloads on an SMP system. This option is used to
+        isolate the Btrfs workqueues to a set of CPUs. It is helpful to avoid
+        sensitive user tasks being preempted by Btrfs heavy workqueues.
+
+        The *cpu_set* is a dot-separated list of decimal numbers and ranges. The
+        numbers are CPU numbers, the ranges are inclusive. For example:
+
+                - *wq_cpu_set=0.3-7* will use CPUs 0, 3, 4, 5, 6 and 7.
+
+                - *wq_cpu_set=0.4.1.5* will use CPUs 0, 1, 4 and 5.
+
+        This option is similar to the taskset bitmask except that the comma separator
+        is replaced with a dot. The reason for this is that the mount option parser
+        uses commas to separate mount options.
+
+        If *wq_cpu_set* option is specificed and the *thread_pool* option is not, the
+        number of default max thread pool size will be set to the number of online
+        CPUs in the specified CPU set plus 2, if and only if the resulting number is
+        less than 8.
+
+        If *wq_cpu_set* option is specificed and the *thread_pool* option is also
+        specified, the thread pool size will be set to the value of *thread_pool*
+        option.
+
+
 DEPRECATED MOUNT OPTIONS
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
