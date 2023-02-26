@@ -411,6 +411,9 @@ thread_pool=<number>
         due to increased locking contention, process scheduling, cache-line bouncing or
         costly data transfers between local CPU memories.
 
+        Since 6.5, if *wq_cpu_set* is set, the default value will be the number of
+        online CPUs in the CPU wq_cpu_set plus 2.
+
 treelog, notreelog
         (default: on)
 
